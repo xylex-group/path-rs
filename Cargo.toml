@@ -1,0 +1,113 @@
+[package]
+name = "path-rs"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Cross-platform path expansion, normalization, traversal, searching, and caching"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/xylex-group/path-rs"
+homepage = "https://github.com/xylex-group/path-rs"
+documentation = "https://docs.rs/path-rs"
+readme = "README.md"
+keywords = ["path", "filesystem", "cross-platform", "glob", "cache"]
+categories = ["filesystem", "os"]
+authors = ["XYLEX Group"]
+include = [
+    "src/**/*",
+    "examples/**/*",
+    "tests/**/*",
+    "benches/**/*",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE-MIT",
+    "LICENSE-APACHE",
+    "Cargo.toml",
+]
+
+[features]
+default = ["listing", "search"]
+listing = ["dep:walkdir"]
+search = ["dep:globset", "listing"]
+persistent-cache = ["dep:serde", "dep:serde_json"]
+unicode = ["dep:unicode-normalization"]
+async = ["dep:tokio"]
+
+[dependencies]
+thiserror = "2"
+dirs = "6"
+dunce = "1"
+
+walkdir = { version = "2", optional = true }
+globset = { version = "0.4", optional = true }
+serde = { version = "1", features = ["derive"], optional = true }
+serde_json = { version = "1", optional = true }
+unicode-normalization = { version = "0.1", optional = true }
+tokio = { version = "1", features = ["fs", "rt"], optional = true }
+
+[dev-dependencies]
+tempfile = "3"
+assert_fs = "1"
+proptest = "1"
+criterion = "0.5"
+
+[[example]]
+name = "list"
+required-features = ["listing"]
+
+[[example]]
+name = "search"
+required-features = ["search"]
+
+[[example]]
+name = "cache"
+required-features = ["search"]
+
+[[test]]
+name = "listing"
+required-features = ["listing"]
+
+[[test]]
+name = "search"
+required-features = ["search"]
+
+[[test]]
+name = "integration"
+required-features = ["listing"]
+
+[[test]]
+name = "discovery"
+required-features = ["listing"]
+
+[[test]]
+name = "edge_discovery"
+required-features = ["listing"]
+
+[[test]]
+name = "edge_listing_search"
+required-features = ["search"]
+
+[[test]]
+name = "edge_integration"
+required-features = ["listing"]
+
+[[test]]
+name = "edge_cache_persistent"
+# runs without persistent-cache; persistent tests are cfg-gated
+
+[[bench]]
+name = "normalize"
+harness = false
+
+[[bench]]
+name = "listing"
+harness = false
+required-features = ["listing"]
+
+[[bench]]
+name = "search"
+harness = false
+required-features = ["search"]
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
