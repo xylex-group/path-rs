@@ -309,9 +309,19 @@ CI runs on Ubuntu, macOS, and Windows.
 ```bash
 cargo run --example expand
 cargo run --example normalize
-cargo run --example list
-cargo run --example search
-cargo run --example cache
+cargo run --example resolve
+cargo run --example dirs
+cargo run --example identity
+cargo run --example inspect
+cargo run --example match_path
+cargo run --example platform
+cargo run --example text_utf8
+cargo run --example text_utf8 --features unicode
+cargo run --example list          # listing
+cargo run --example discovery     # listing
+cargo run --example search        # search
+cargo run --example cache         # search
+cargo run --example persistent_cache --features persistent-cache
 ```
 
 ## Contributing

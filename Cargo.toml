@@ -62,6 +62,18 @@ required-features = ["search"]
 name = "cache"
 required-features = ["search"]
 
+[[example]]
+name = "discovery"
+required-features = ["listing"]
+
+[[example]]
+name = "persistent_cache"
+required-features = ["search", "persistent-cache"]
+
+[[example]]
+name = "text_utf8"
+# optional `unicode` feature enables `logical_path_key` inside the example
+
 [[test]]
 name = "listing"
 required-features = ["listing"]
