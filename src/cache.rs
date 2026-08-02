@@ -209,7 +209,7 @@ impl DiscoveryCache for MemoryCache {
         if self.options.mode == CacheMode::Disabled {
             return Ok(None);
         }
-        let mut guard = self
+        let mut guard: std::sync::MutexGuard<'_, HashMap<CacheKey, CacheValue>> = self
             .inner
             .lock()
             .map_err(|_| PathError::cache("memory cache lock poisoned"))?;
