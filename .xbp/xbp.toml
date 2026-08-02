@@ -1,0 +1,107 @@
+project_name = "path-rs"
+version = "0.1.0"
+port = 8000
+build_dir = "./"
+app_type = "api-rust"
+build_command = "cargo build --release"
+start_command = "./target/release/path-rs"
+target = "api-rust"
+branch = "main"
+version_targets = ["Cargo.toml"]
+version_domains = []
+ignore_paths = []
+watch_ignore_paths = []
+versioning_disabled = []
+release_disabled = []
+
+[[services]]
+name = "path-rs"
+target = "api-rust"
+branch = "main"
+port = 8000
+root_directory = "./"
+restart_policy = "on_failure"
+restart_policy_max_failure_count = 10
+start_wrapper = "pm2"
+force_run_from_root = false
+version_targets = ["Cargo.toml"]
+
+[services.commands]
+build = "cargo build --release"
+start = "./target/release/path-rs"
+
+[services.oci]
+image = "registry.xbp.app/xylex-group/path-rs"
+tag = "latest"
+tag_from = "version"
+context = "./"
+platforms = ["linux/amd64"]
+
+[services.oci.build_args]
+
+[services.deploy]
+provider = "kubernetes"
+
+[services.deploy.destinations.local]
+provider = "local"
+enabled = true
+
+[services.deploy.envs.production]
+namespace = "path-rs"
+replicas = 1
+health = []
+
+[services.deploy.envs.production.kubernetes]
+workload = "path-rs"
+service = "path-rs"
+selector = "app=path-rs"
+
+[oci]
+default_registry = "registry.xbp.app"
+owner = "xylex-group"
+repository = "xylex-group/path-rs"
+
+[oci.registries."registry.xbp.app"]
+provider = "github"
+username = "xylex-group"
+token_source = "${GITHUB_TOKEN}"
+
+[github]
+repository = "xylex-group/path-rs"
+
+[github.release_branch]
+enabled = true
+naming_template = "releases/{SERVICE_NAME}-{VERSION}"
+
+[publish.crates]
+enabled = true
+package_name = "path-rs"
+working_directory = "."
+manifest_path = "Cargo.toml"
+packages = []
+token = "${CARGO_REGISTRY_TOKEN}"
+preflight_commands = []
+publish_command = "cargo publish --locked"
+use_wsl = false
+no_verify_retry_packages = []
+
+[discord]
+enabled = true
+webhook_url = "${DISCORD_WEBHOOK_URL}"
+username = "XBP"
+
+[discord.events]
+version_release = true
+github_tag = false
+github_release = false
+crates_io = true
+npm = true
+linear = true
+cargo_dist = true
+oci = true
+workers_deploy = true
+kubernetes_deploy = true
+deploy = true
+openapi = true
+issues = true
+commit = true
